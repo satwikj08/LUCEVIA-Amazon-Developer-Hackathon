@@ -1,0 +1,23 @@
+{
+  "name": "com.amazon.lucevia.agent",
+  "version": "1.0.0",
+  "displayName": "Lucevia TV Agent",
+  "description": "Amazon Vega OS native overlay agent for real-time video comprehension",
+  "type": "system-overlay",
+  "entry": "index.html",
+  "permissions": [
+    "vega.permission.SYSTEM_OVERLAY",
+    "vega.permission.MEDIA_SESSION_ACCESS",
+    "vega.permission.REMOTE_KEY_LISTENER"
+  ],
+  "window": {
+    "transparent": true,
+    "alwaysOnTop": true,
+    "hardwareAccelerated": true
+  },
+  "supportedInputs": [
+    "dpad",
+    "voice",
+    "remote"
+  ]
+}

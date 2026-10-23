@@ -1,0 +1,16 @@
+{
+  "name": "lucevia",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Lucevia — TV-first comprehension companion for Fire TV",
+  "type": "module",
+  "scripts": {
+    "start": "node server/index.js",
+    "test": "node --test",
+    "check": "node --check server/index.js && node --check public/app.js"
+  },
+  "dependencies": {
+    "@google/genai": "^2.31.0",
+    "dotenv": "^18.0.9"
+  }
+}

@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Lucevia — Luxury AI Comprehension Agent for Fire OS & Vega OS." />
+    <title>Lucevia — TV AI Comprehension Agent | Fire OS & Vega OS</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <!-- Main TV Viewport -->
+    <main id="tv-app">
+      
+      <!-- TOP STATUS BAR (Fire TV System Bar with Ambient Ask Lucevia Agent Button) -->
+      <header class="fire-tv-topbar">
+        <div class="brand-badge">
+          <img src="/assets/lucevia-star.png" class="brand-logo-emblem" alt="Lucevia Emblem" />
+          <div class="brand-info">
+            <span class="brand-title">LUCEVIA</span>
+            <span class="brand-tagline">AI COMPANION · FIRE OS / VEGA OS</span>
+          </div>
+        </div>
+
+        <!-- Active Media Context Badge -->
+        <div class="active-stream-badge">
+          <span class="stream-live-dot" title="Video stream active"></span>
+          <span class="stream-source" id="stream-platform-label">STREAMING:</span>
+          <span class="stream-title" id="stream-title-display" title="Click to rename video" contenteditable="true">Live Video Stream</span>
+          <span class="stream-sep hidden" id="stream-sep">·</span>
+          <span class="stream-time hidden" id="stream-time-display" title="Click to edit timestamp" contenteditable="true">--:--</span>
+        </div>
+
+        <!-- Top Actions: Media Loaders + Ambient Agent Trigger -->
+        <div class="top-actions">
+          <button class="top-util-btn" id="btn-open-file" title="Load any video file from your computer">
+            <span>📁 Load Video File</span>
+          </button>
+          <button class="top-util-btn" id="btn-open-yt" title="Paste any YouTube video link">
+            <span>🔗 YouTube URL</span>
+          </button>
+          <input type="file" id="local-file-input" accept="video/mp4,video/webm,video/quicktime,video/*" style="display:none" />
+
+          <!-- The Fire OS "Ask Lucevia AI" Button (like Ask Gemini in Chrome) -->
+          <button class="ask-lucevia-pill" id="btn-trigger-agent" title="Ask Lucevia AI [Press H / Enter]">
+            <img src="/assets/lucevia-star.png" class="pill-star-emblem" alt="✦" />
+            <span class="pill-text">Ask Lucevia AI</span>
+            <span class="pill-shortcut">[H]</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- TV SCREEN CONTENT SURFACE -->
+      <section class="tv-screen-surface">
+        
+        <!-- Video Layer: Native HTML5 Player (For local files or web streams) -->
+        <video id="tv-video-player" playsinline controls preload="metadata"></video>
+
+        <!-- Video Layer: YouTube Embed Player (For YouTube streams) -->
+        <div id="yt-player-container" class="hidden">
+          <div id="yt-iframe-slot"></div>
+        </div>
+
+        <!-- Ambient Video Placeholder (When no video is actively playing) -->
+        <div id="ambient-placeholder" class="ambient-placeholder">
+          <div class="ambient-glow"></div>
+          <div class="placeholder-card">
+            <img src="/assets/lucevia-logo.png" class="placeholder-hero-logo" alt="Lucevia" />
+            <h2>Fire TV Video Stream</h2>
+            <p id="placeholder-status-desc">
+              Play any video on Netflix, YouTube, or your own video file. Pause at any moment, then click <strong style="color:var(--gold)">Ask Lucevia AI</strong> in the top right corner.
+            </p>
+            <div class="placeholder-buttons">
+              <button class="cta-btn gold" id="btn-placeholder-file">📁 Select Video File (.mp4 / .mov)</button>
+              <button class="cta-btn" id="btn-placeholder-yt">🔗 Paste YouTube URL</button>
+            </div>
+            <div class="demo-hints">
+              <span><img src="/assets/lucevia-star.png" class="inline-star-emblem" alt="✦" /> Instant testing: You can load any video or enter any topic and click <strong>Ask Lucevia AI</strong>.</span>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- BOTTOM TV PLAYBACK BAR -->
+      <footer class="tv-playback-bar">
+        <div class="playback-left">
+          <button class="playback-ctrl-btn" id="btn-play-pause-toggle" title="Play/Pause [Space]">
+            <span id="playback-icon">▶</span>
+          </button>
+          <div class="playback-timer" id="playback-timer-group">
+            <span id="lbl-time-cur">--:--</span>
+            <span class="timer-slash">/</span>
+            <span id="lbl-time-dur">--:--</span>
+          </div>
+          <div class="playback-title-info">
+            <span class="lbl-dim">PLAYING:</span>
+            <span class="lbl-title" id="lbl-current-video-name">Live Video Stream</span>
+          </div>
+        </div>
+
+        <div class="playback-right">
+          <button class="playback-ask-btn" id="btn-bottom-ask">
+            <img src="/assets/lucevia-star.png" class="btn-star-emblem" alt="✦" />
+            <span>Ask Lucevia at this moment</span>
+          </button>
+        </div>
+      </footer>
+
+      <!-- ====================================================================
+           LUCEVIA AI AGENT COMPANION (Sliding Luxury Side Overlay, like Ask Gemini)
+           ==================================================================== -->
+      <aside id="lucevia-agent-panel" class="agent-side-panel hidden" role="dialog" aria-modal="true" aria-label="Lucevia AI Agent">
+        <div class="panel-inner">
+          
+          <!-- Agent Header -->
+          <div class="panel-header">
+            <div class="header-top-row">
+              <div class="agent-tag">
+                <img src="/assets/lucevia-star.png" class="tag-star-emblem" alt="✦" />
+                <span>LUCEVIA AI AGENT · FIRE OS COMPANION</span>
+              </div>
+              <button class="panel-close-btn" id="btn-close-agent" title="Close Agent [Esc]">✕</button>
+            </div>
+
+            <div class="scene-focus-banner">
+              <div class="focus-time-pill" id="agent-focus-time">Active Scene</div>
+              <div class="focus-details">
+                <div class="focus-title" id="agent-focus-title">Live Video Stream</div>
+                <div class="focus-sub">Analyzing video scene in real time via Google Gemini LLM</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ask Anything Prompt Box -->
+          <div class="agent-ask-section">
+            <form id="agent-query-form" class="ask-form">
+              <div class="ask-input-row">
+                <input 
+                  type="text" 
+                  id="agent-custom-query" 
+                  placeholder="Ask any question about this video..." 
+                  autocomplete="off"
+                />
+                <button type="submit" class="ask-send-btn" id="btn-submit-query" title="Submit Question">
+                  <span>Ask AI</span>
+                  <img src="/assets/lucevia-star.png" class="btn-star-emblem" alt="✦" />
+                </button>
+              </div>
+            </form>
+
+            <!-- Quick Suggestion Prompts -->
+            <div class="suggestion-chips" id="suggestion-chips">
+              <button class="chip-item" data-prompt="Explain what is happening in this video at this moment">Explain this moment</button>
+              <button class="chip-item" data-prompt="What is the key takeaway or significance of this scene?">Key takeaway</button>
+              <button class="chip-item" data-prompt="Explain the technical concepts or terms mentioned here">Explain concepts</button>
+              <button class="chip-item" data-prompt="Give me a simple real-world analogy for this">Simple analogy</button>
+            </div>
+          </div>
+
+          <!-- Mode Selector Tabs (Horizontal Pill Selector: Explain / Visual / Quiz) -->
+          <nav class="agent-feature-tabs" role="tablist">
+            <button class="feature-tab active" id="tab-mode-explain" data-mode="explain" role="tab" aria-selected="true">
+              <span class="tab-emoji">💡</span>
+              <span class="tab-name">Explain simply</span>
+            </button>
+            <button class="feature-tab" id="tab-mode-visual" data-mode="visual" role="tab" aria-selected="false">
+              <span class="tab-emoji">🖼️</span>
+              <span class="tab-name">Show visually</span>
+            </button>
+            <button class="feature-tab" id="tab-mode-quiz" data-mode="quiz" role="tab" aria-selected="false">
+              <span class="tab-emoji">❓</span>
+              <span class="tab-name">Check understanding</span>
+            </button>
+          </nav>
+
+          <!-- Dynamic Agent Content Display Area (Spacious, Clean, Never Cut Off) -->
+          <section class="agent-content-area" id="agent-content-area" aria-live="polite">
+            <!-- Dynamically populated with Gemini LLM response -->
+          </section>
+
+          <!-- Agent Footer Controls -->
+          <div class="panel-footer">
+            <button class="footer-btn primary" id="btn-agent-resume">
+              <span>▶</span> Resume Video
+            </button>
+            <button class="footer-btn" id="btn-agent-recap">
+              <span>📋</span> Session Recap
+            </button>
+            <button class="footer-btn ghost" id="btn-agent-dismiss">
+              Dismiss
+            </button>
+          </div>
+
+        </div>
+      </aside>
+
+      <!-- YOUTUBE URL MODAL -->
+      <div id="modal-youtube" class="modal-layer hidden" role="dialog" aria-modal="true">
+        <div class="modal-box">
+          <div class="modal-box-header">
+            <div class="agent-tag">
+              <img src="/assets/lucevia-star.png" class="modal-star-emblem" alt="✦" />
+              <span>LOAD YOUTUBE STREAM</span>
+            </div>
+            <h3>Paste YouTube Video URL</h3>
+            <button class="panel-close-btn" id="btn-close-yt-modal">✕</button>
+          </div>
+          <p class="modal-description">Enter any YouTube lecture, debate, news clip, sports match, or documentary:</p>
+          <div class="modal-input-wrap">
+            <input type="text" id="yt-url-input" placeholder="https://www.youtube.com/watch?v=... or https://youtu.be/..." />
+          </div>
+          <div class="modal-box-actions">
+            <button class="footer-btn primary" id="btn-yt-submit">Load & Play Video</button>
+            <button class="footer-btn ghost" id="btn-yt-cancel">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SESSION RECAP MODAL -->
+      <div id="modal-recap" class="modal-layer hidden" role="dialog" aria-modal="true">
+        <div class="modal-box wide">
+          <div class="modal-box-header">
+            <div class="agent-tag">
+              <img src="/assets/lucevia-star.png" class="modal-star-emblem" alt="✦" />
+              <span>VIEWING SESSION RECAP</span>
+            </div>
+            <h3>Concepts Mastered This Viewing Session</h3>
+            <button class="panel-close-btn" id="btn-close-recap-modal">✕</button>
+          </div>
+          <p class="modal-description">All explanations and questions answered by Lucevia AI while watching video:</p>
+          <div class="recap-items-container" id="recap-items-list">
+            <!-- Filled dynamically -->
+          </div>
+          <div class="modal-box-actions">
+            <button class="footer-btn primary" id="btn-recap-back">Back to Video</button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="app-toast" class="app-toast toast-hidden" role="alert"></div>
+
+    <!-- YouTube IFrame API & Application Logic -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

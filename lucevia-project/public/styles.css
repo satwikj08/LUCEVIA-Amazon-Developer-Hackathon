@@ -1,0 +1,1298 @@
+/* ==========================================================================
+   LUCEVIA — TV-Native Luxury AI Agent Design System
+   60:30:10 Luxury Ratio:
+   - 60% Dominant: Obsidian Black & Deep Space Navy (#040711, #070c1a)
+   - 30% Secondary: Refined Slate Glass (rgba(17, 26, 44, 0.85))
+   - 10% Accent: Champagne Warm Gold (#f5c96a, #ffe29a)
+   ========================================================================== */
+
+:root {
+  /* 60% Dominant Color Foundation */
+  --bg-obsidian: #040711;
+  --bg-deep-space: #070c1a;
+  --bg-surface: #0a1122;
+
+  /* 30% Secondary Slate Glass */
+  --slate-glass: rgba(17, 26, 44, 0.86);
+  --slate-solid: #111a2d;
+  --slate-card: rgba(22, 34, 58, 0.72);
+  --slate-hover: rgba(30, 46, 78, 0.9);
+  --border-subtle: rgba(255, 255, 255, 0.1);
+  --border-slate: rgba(65, 88, 125, 0.4);
+
+  /* 10% Champagne Gold Accents */
+  --gold: #f5c96a;
+  --gold-champagne: #e5b74c;
+  --gold-soft: #ffe29a;
+  --gold-glow: rgba(245, 201, 106, 0.35);
+
+  /* Typography */
+  --text-main: #f6f8fb;
+  --text-muted: #8c9eb5;
+  --text-dim: #5c6e85;
+
+  /* Feedback */
+  --status-ok: #7ee8b8;
+  --status-bad: #ff9d8a;
+
+  /* Radii & Shadows */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --shadow-panel: -20px 0 80px rgba(0, 0, 0, 0.85);
+  --focus-glow: 0 0 0 2.5px var(--gold), 0 0 24px var(--gold-glow);
+}
+
+/* --------------------------------------------------------------------------
+   Reset & Viewport
+   -------------------------------------------------------------------------- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: var(--bg-obsidian);
+  color: var(--text-main);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", system-ui, sans-serif;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+#tv-app {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #000;
+  overflow: hidden;
+}
+
+/* --------------------------------------------------------------------------
+   1. Fire TV System Topbar
+   -------------------------------------------------------------------------- */
+.fire-tv-topbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 76px;
+  padding: 0 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(180deg, rgba(4, 7, 17, 0.92) 0%, rgba(4, 7, 17, 0.55) 70%, transparent 100%);
+  backdrop-filter: blur(14px);
+  z-index: 30;
+}
+
+.brand-badge {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-logo-emblem {
+  height: 32px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 12px var(--gold-glow));
+}
+
+.brand-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-title {
+  font-size: 19px;
+  font-weight: 900;
+  letter-spacing: 0.26em;
+  color: #fff;
+  line-height: 1;
+}
+
+.brand-tagline {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--gold);
+  margin-top: 3px;
+}
+
+/* Active Stream Badge (Center) */
+.active-stream-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(14, 22, 38, 0.82);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 8px 18px;
+  max-width: 480px;
+  backdrop-filter: blur(16px);
+}
+
+.stream-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 10px var(--gold);
+  flex-shrink: 0;
+}
+
+.stream-source {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+}
+
+.stream-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  outline: none;
+  cursor: text;
+}
+
+.stream-title:focus {
+  color: var(--gold-soft);
+  text-decoration: underline;
+}
+
+.stream-sep {
+  color: var(--text-dim);
+}
+
+.stream-time {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--gold);
+  font-variant-numeric: tabular-nums;
+  outline: none;
+  cursor: text;
+}
+
+.stream-time:focus {
+  text-decoration: underline;
+}
+
+/* Topbar Actions (Right) */
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.top-util-btn {
+  background: rgba(17, 26, 44, 0.75);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.top-util-btn:hover,
+.top-util-btn:focus-visible {
+  border-color: var(--gold);
+  color: #fff;
+  outline: none;
+}
+
+/* Ambient "Ask Lucevia AI" Button (Like Ask Gemini in Chrome) */
+.ask-lucevia-pill {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: linear-gradient(135deg, rgba(245, 201, 106, 0.18) 0%, rgba(245, 201, 106, 0.08) 100%);
+  border: 1.5px solid var(--gold);
+  color: #fff;
+  font-size: 13.5px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  padding: 9px 18px;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(245, 201, 106, 0.22);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ask-lucevia-pill:hover,
+.ask-lucevia-pill:focus-visible {
+  background: linear-gradient(135deg, rgba(245, 201, 106, 0.32) 0%, rgba(245, 201, 106, 0.16) 100%);
+  box-shadow: 0 6px 28px rgba(245, 201, 106, 0.45);
+  transform: translateY(-1.5px);
+  outline: none;
+}
+
+.pill-star-emblem {
+  height: 20px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 6px var(--gold-glow));
+  animation: starPulse 2.4s infinite ease-in-out;
+}
+
+.btn-star-emblem {
+  height: 18px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 6px var(--gold-glow));
+}
+
+.tag-star-emblem {
+  height: 16px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 6px var(--gold-glow));
+}
+
+.modal-star-emblem {
+  height: 16px;
+  width: auto;
+  object-fit: contain;
+  vertical-align: middle;
+}
+
+.inline-star-emblem {
+  height: 14px;
+  width: auto;
+  object-fit: contain;
+  vertical-align: middle;
+}
+
+.bullet-star-img {
+  height: 14px;
+  width: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+  margin-top: 2px;
+  filter: drop-shadow(0 0 4px var(--gold-glow));
+}
+
+.loading-star-img {
+  height: 48px;
+  width: auto;
+  object-fit: contain;
+  animation: spinStar 2s linear infinite;
+  filter: drop-shadow(0 0 16px var(--gold-glow));
+}
+
+.placeholder-hero-logo {
+  max-width: 320px;
+  height: auto;
+  object-fit: contain;
+  margin-bottom: 22px;
+  filter: drop-shadow(0 0 24px rgba(245, 201, 106, 0.45));
+}
+
+.star-glow {
+  color: var(--gold);
+  font-size: 15px;
+  animation: starPulse 2.4s infinite ease-in-out;
+}
+
+@keyframes starPulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 3px var(--gold)); }
+  50% { transform: scale(1.2); filter: drop-shadow(0 0 10px var(--gold)); }
+}
+
+.pill-shortcut {
+  font-size: 10.5px;
+  font-weight: 800;
+  background: rgba(245, 201, 106, 0.25);
+  color: var(--gold-soft);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* --------------------------------------------------------------------------
+   2. TV Screen Content Surface (Video Layer)
+   -------------------------------------------------------------------------- */
+.tv-screen-surface {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+#tv-video-player {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000;
+}
+
+#yt-player-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+}
+
+#yt-iframe-slot {
+  width: 100%;
+  height: 100%;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Ambient Placeholder Surface */
+.ambient-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 50% 45%, #0b1426 0%, #040711 75%);
+  z-index: 5;
+}
+
+.ambient-glow {
+  position: absolute;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(245, 201, 106, 0.06) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.placeholder-card {
+  position: relative;
+  max-width: 620px;
+  background: rgba(14, 22, 38, 0.85);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 44px 40px;
+  text-align: center;
+  backdrop-filter: blur(28px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+}
+
+.card-star {
+  font-size: 32px;
+  color: var(--gold);
+  display: inline-block;
+  margin-bottom: 14px;
+}
+
+.placeholder-card h2 {
+  font-size: 26px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.01em;
+  margin-bottom: 12px;
+}
+
+.placeholder-card p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-muted);
+  margin-bottom: 26px;
+}
+
+.placeholder-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.cta-btn {
+  background: rgba(22, 34, 58, 0.85);
+  border: 1px solid var(--border-subtle);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 12px 22px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.cta-btn.gold {
+  background: var(--gold);
+  color: #070d18;
+  border-color: var(--gold);
+}
+
+.cta-btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--gold);
+}
+
+.demo-hints {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+/* --------------------------------------------------------------------------
+   3. Bottom Playback Bar
+   -------------------------------------------------------------------------- */
+.tv-playback-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  padding: 0 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(0deg, rgba(4, 7, 17, 0.95) 0%, rgba(4, 7, 17, 0.6) 75%, transparent 100%);
+  backdrop-filter: blur(14px);
+  z-index: 25;
+}
+
+.playback-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.playback-ctrl-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(245, 201, 106, 0.15);
+  border: 1.5px solid var(--gold);
+  color: var(--gold);
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.playback-ctrl-btn:hover {
+  background: var(--gold);
+  color: #050914;
+}
+
+.playback-timer {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+  display: flex;
+  gap: 6px;
+}
+
+.timer-slash {
+  color: var(--text-dim);
+}
+
+.playback-title-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 12px;
+}
+
+.lbl-dim {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+}
+
+.lbl-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ccd7e6;
+}
+
+.playback-ask-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(17, 26, 44, 0.9);
+  border: 1.5px solid rgba(245, 201, 106, 0.45);
+  color: #ffffff;
+  font-size: 13.5px;
+  font-weight: 700;
+  padding: 11px 22px;
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.playback-ask-btn:hover {
+  border-color: var(--gold);
+  box-shadow: 0 6px 24px rgba(245, 201, 106, 0.35);
+  transform: translateY(-2px);
+}
+
+/* --------------------------------------------------------------------------
+   4. LUCEVIA AI AGENT COMPANION (Luxury Side Panel, like Ask Gemini)
+   -------------------------------------------------------------------------- */
+.agent-side-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 680px;
+  max-width: 92vw;
+  height: 100%;
+  background: var(--slate-glass);
+  backdrop-filter: blur(40px) saturate(190%);
+  border-left: 1.5px solid var(--border-subtle);
+  box-shadow: var(--shadow-panel);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.28s ease;
+  overflow: hidden;
+}
+
+.agent-side-panel.hidden {
+  transform: translateX(105%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.panel-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Agent Header */
+.panel-header {
+  padding: 28px 32px 18px;
+  border-bottom: 1px solid var(--border-subtle);
+  background: rgba(10, 16, 28, 0.55);
+}
+
+.header-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.agent-tag {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.panel-close-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+
+.panel-close-btn:hover {
+  border-color: var(--gold);
+  color: #fff;
+  background: rgba(245, 201, 106, 0.2);
+}
+
+.scene-focus-banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(14, 22, 38, 0.7);
+  border: 1px solid var(--border-slate);
+  border-radius: var(--radius-md);
+  padding: 12px 18px;
+}
+
+.focus-time-pill {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--gold);
+  background: rgba(245, 201, 106, 0.15);
+  border: 1px solid rgba(245, 201, 106, 0.35);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.focus-details {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.focus-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.focus-sub {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Ask Anything Input Section */
+.agent-ask-section {
+  padding: 18px 32px 14px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.ask-form {
+  margin-bottom: 10px;
+}
+
+.ask-input-row {
+  display: flex;
+  gap: 10px;
+  background: rgba(8, 13, 24, 0.95);
+  border: 1.5px solid var(--border-slate);
+  border-radius: var(--radius-md);
+  padding: 6px 8px 6px 16px;
+  transition: border-color 0.2s;
+}
+
+.ask-input-row:focus-within {
+  border-color: var(--gold);
+  box-shadow: 0 0 16px rgba(245, 201, 106, 0.2);
+}
+
+.ask-input-row input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 14.5px;
+  font-family: inherit;
+  outline: none;
+}
+
+.ask-input-row input::placeholder {
+  color: var(--text-dim);
+}
+
+.ask-send-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--gold);
+  border: none;
+  color: #070d18;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 10px 18px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.ask-send-btn:hover {
+  background: var(--gold-soft);
+  transform: translateY(-1px);
+}
+
+/* Suggestion Chips */
+.suggestion-chips {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.suggestion-chips::-webkit-scrollbar {
+  height: 4px;
+}
+
+.chip-item {
+  background: rgba(22, 34, 58, 0.6);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.chip-item:hover {
+  border-color: var(--gold);
+  color: var(--gold-soft);
+  background: rgba(245, 201, 106, 0.1);
+}
+
+/* Mode Selector Tabs (Explain / Visual / Quiz) */
+.agent-feature-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 14px 32px;
+  border-bottom: 1px solid var(--border-subtle);
+  background: rgba(10, 16, 28, 0.45);
+}
+
+.feature-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(20, 30, 50, 0.5);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  color: var(--text-muted);
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.feature-tab:hover {
+  border-color: rgba(245, 201, 106, 0.4);
+  color: #fff;
+}
+
+.feature-tab.active {
+  background: linear-gradient(135deg, rgba(35, 52, 85, 0.95) 0%, rgba(20, 32, 54, 0.95) 100%);
+  border-color: var(--gold);
+  color: #fff;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4), inset 0 0 12px rgba(245, 201, 106, 0.1);
+}
+
+/* --------------------------------------------------------------------------
+   5. Agent Content Area (Clean, Spacious, Never Cut Off)
+   -------------------------------------------------------------------------- */
+.agent-content-area {
+  flex: 1;
+  padding: 24px 32px;
+  overflow-y: auto;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.agent-content-area::-webkit-scrollbar {
+  width: 8px;
+}
+
+.agent-content-area::-webkit-scrollbar-track {
+  background: rgba(4, 7, 17, 0.4);
+}
+
+.agent-content-area::-webkit-scrollbar-thumb {
+  background: rgba(65, 88, 125, 0.5);
+  border-radius: 4px;
+}
+
+.agent-content-area::-webkit-scrollbar-thumb:hover {
+  background: var(--gold);
+}
+
+/* Results Content Card */
+.content-result-card {
+  animation: cardFadeUp 0.3s ease;
+}
+
+@keyframes cardFadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.content-topic-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.content-topic-badge {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: var(--gold);
+  text-transform: uppercase;
+}
+
+.content-topic-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.01em;
+  margin-bottom: 16px;
+  line-height: 1.3;
+}
+
+.content-paragraph {
+  font-size: 15.5px;
+  line-height: 1.7;
+  color: #edf2fa;
+  margin-bottom: 16px;
+}
+
+/* Relatable Analogy Card */
+.analogy-box {
+  background: rgba(245, 201, 106, 0.08);
+  border-left: 3.5px solid var(--gold);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  padding: 16px 20px;
+  margin: 20px 0;
+}
+
+.analogy-eyebrow {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.analogy-text {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: #f7f9fd;
+  font-style: italic;
+}
+
+/* Key Takeaways Section */
+.takeaways-section {
+  margin: 22px 0;
+}
+
+.takeaways-heading {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.takeaways-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.takeaways-list li {
+  display: flex;
+  gap: 12px;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: #ccd7e6;
+  background: rgba(18, 28, 48, 0.65);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+}
+
+.takeaways-list li::before {
+  content: "✦";
+  color: var(--gold);
+  font-size: 13px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* Visual Diagram Card Flow */
+.diagram-flow-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.diagram-step-card {
+  background: rgba(18, 28, 48, 0.75);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s;
+}
+
+.diagram-step-card.active-phase {
+  border-color: var(--gold);
+  background: rgba(245, 201, 106, 0.12);
+  box-shadow: 0 4px 20px rgba(245, 201, 106, 0.18);
+}
+
+.step-label {
+  font-size: 15px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.diagram-step-card.active-phase .step-label {
+  color: var(--gold-soft);
+}
+
+.step-desc {
+  font-size: 13.5px;
+  color: #ccd7e6;
+  max-width: 65%;
+  text-align: right;
+}
+
+/* Quiz Card */
+.quiz-container {
+  margin: 18px 0;
+}
+
+.quiz-question {
+  font-size: 17px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.45;
+  margin-bottom: 18px;
+}
+
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.quiz-choice-btn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(18, 28, 48, 0.7);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  color: #edf2fa;
+  font-size: 14.5px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.quiz-choice-btn:hover {
+  background: rgba(30, 46, 78, 0.85);
+  border-color: var(--gold);
+}
+
+.choice-letter {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-subtle);
+  color: var(--gold);
+  font-size: 13px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.quiz-choice-btn.correct {
+  background: rgba(126, 232, 184, 0.16);
+  border-color: var(--status-ok);
+  color: #fff;
+}
+
+.quiz-choice-btn.correct .choice-letter {
+  background: var(--status-ok);
+  color: #050a14;
+  border-color: var(--status-ok);
+}
+
+.quiz-choice-btn.wrong {
+  background: rgba(255, 157, 138, 0.16);
+  border-color: var(--status-bad);
+  color: #ffb6a8;
+}
+
+.quiz-choice-btn.wrong .choice-letter {
+  background: var(--status-bad);
+  color: #050a14;
+  border-color: var(--status-bad);
+}
+
+.quiz-rationale-box {
+  margin-top: 18px;
+  background: rgba(14, 22, 38, 0.85);
+  border: 1px solid var(--border-slate);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  animation: cardFadeUp 0.25s ease;
+}
+
+.rationale-title {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.rationale-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #e2eaf5;
+}
+
+/* Loading State */
+.loading-box {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.loading-spinner {
+  font-size: 38px;
+  color: var(--gold);
+  display: inline-block;
+  animation: spinStar 1.4s linear infinite;
+}
+
+@keyframes spinStar {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.loading-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--gold);
+  margin-top: 16px;
+}
+
+.loading-sub {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+/* --------------------------------------------------------------------------
+   6. Panel Footer Controls
+   -------------------------------------------------------------------------- */
+.panel-footer {
+  padding: 18px 32px;
+  border-top: 1px solid var(--border-subtle);
+  background: rgba(10, 16, 28, 0.7);
+  display: flex;
+  gap: 12px;
+}
+
+.footer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(22, 34, 58, 0.75);
+  border: 1px solid var(--border-subtle);
+  color: #edf2fa;
+  font-size: 13.5px;
+  font-weight: 700;
+  padding: 11px 20px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.footer-btn.primary {
+  background: var(--gold);
+  color: #070d18;
+  border-color: var(--gold);
+}
+
+.footer-btn.primary:hover {
+  background: var(--gold-soft);
+  transform: translateY(-1.5px);
+}
+
+.footer-btn.ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--text-muted);
+}
+
+.footer-btn.ghost:hover {
+  color: #fff;
+}
+
+/* --------------------------------------------------------------------------
+   7. Modals (YouTube URL & Session Recap)
+   -------------------------------------------------------------------------- */
+.modal-layer {
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 6, 14, 0.88);
+  backdrop-filter: blur(24px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+
+.modal-box {
+  width: 520px;
+  max-width: 90vw;
+  background: rgba(14, 22, 38, 0.95);
+  border: 1.5px solid var(--border-slate);
+  border-radius: var(--radius-lg);
+  padding: 34px 36px;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.9);
+}
+
+.modal-box.wide {
+  width: 720px;
+}
+
+.modal-box-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.modal-box-header .panel-close-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.modal-box-header h3 {
+  font-size: 22px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.modal-description {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+.modal-input-wrap input {
+  width: 100%;
+  background: rgba(6, 11, 20, 0.95);
+  border: 1.5px solid var(--border-slate);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  color: #fff;
+  font-size: 14.5px;
+  font-family: inherit;
+  outline: none;
+  margin-bottom: 24px;
+}
+
+.modal-input-wrap input:focus {
+  border-color: var(--gold);
+}
+
+.modal-box-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.recap-items-container {
+  max-height: 380px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.recap-item-card {
+  background: rgba(22, 34, 58, 0.7);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+}
+
+.recap-item-topic {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--gold);
+  margin-bottom: 4px;
+}
+
+.recap-item-summary {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: #ccd7e6;
+}
+
+/* --------------------------------------------------------------------------
+   8. Toast Notification
+   -------------------------------------------------------------------------- */
+.app-toast {
+  position: fixed;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(14, 22, 38, 0.95);
+  border: 1.5px solid var(--gold);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 12px 24px;
+  border-radius: 30px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 20px var(--gold-glow);
+  z-index: 200;
+  transition: opacity 0.25s, transform 0.25s;
+  pointer-events: none;
+}
+
+.toast-hidden {
+  opacity: 0;
+  transform: translateX(-50%) translateY(20px);
+}
