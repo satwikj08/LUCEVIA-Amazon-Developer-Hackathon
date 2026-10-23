@@ -38,3 +38,8 @@ View Beyond What You See...!
 ---
 
 ## 3. Project Structure
+
+Code Antigravity/ ├── .env.example ← Example environment variables template ├── .gitignore ← Standard Git ignore rules ├── package.json ← Project scripts and configuration ├── package-lock.json ← Locked dependency tree ├── README.md ← Project overview and documentation ├── Lucevia_Hackathon_Implementation_Plan.pdf ← Complete architectural specification ├── server/ │ └── index.js ← Node.js backend (Gemini API + oEmbed + static server) ├── public/ │ ├── index.html ← TV-first single page interface │ ├── styles.css ← Luxury dark 60:30:10 TV design system │ ├── app.js ← Client state, video frame capture, and agent logic │ └── assets/ │ ├── lucevia-logo.png ← Official Lucevia logo wordmark │ └── lucevia-star.png ← Warm gold star emblem ├── test/ │ └── smoke.test.js ← Automated test suite (Gemini vision & YouTube grounding) ├── android-fireos/ ← Native Fire OS integration │ ├── AndroidManifest.xml ← System overlay and accessibility service manifest │ ├── LuceviaOverlayService.java ← TYPE_APPLICATION_OVERLAY system window manager │ └── LuceviaAccessibilityService.java ← Remote control key interceptor └── vega-os/ ← Native Vega OS integration ├── app-manifest.json ← Vega OS application definition └── vega-bridge.js ← React Native IPC event bridge
+
+
+
